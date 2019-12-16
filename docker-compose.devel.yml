@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  scraper:
+    build: .
+    container_name: scrapy
+    ports:
+      - "5000:5000"
+    networks:
+      - scrapy_mysql_net
+    command: ["scrapy", "crawl", "demospider"]
+  db:
+    image: mysql
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_NATIVE_PASSWORD: 'pass'
+      MYSQL_ROOT_PASSWORD: 'pass'
+      MYSQL_PASSWORD: 'pass'
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_HOST: '%'
+      MYSQL_USER: 'scraper'
+    volumes:
+      - ./db_dir:/var/lib/mysql
+    networks:
+      - scrapy_mysql_net
+    ports:
+      - "3306:3306"
+    expose:
+      - 3306
+
+volumes:
+  db_dir:
+
+networks:
+  scrapy_mysql_net:
