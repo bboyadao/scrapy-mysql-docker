@@ -2,13 +2,16 @@ version: '3'
 
 services:
   scraper:
-    build: .
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     container_name: scrapy
     ports:
       - "5000:5000"
     networks:
       - scrapy_mysql_net
-    command: ["scrapy", "crawl", "demospider"]
+    # command: "tail -f requirements.txt"
+    command: ["python", "turn-spider.py"]
   db:
     image: mysql
     container_name: mysql
